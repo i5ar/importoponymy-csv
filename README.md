@@ -21,8 +21,8 @@ Considerato un secondo CSV composto da **nome area di circolazione**, **numero c
 
 Es.
 
-| nome area di circolazione | numero civico | esponente |     |
-|:--------------------------|:-------------:|:----------:-----|
+| nome area di circolazione | numero civico | esponente | ... |
+|:--------------------------|:-------------:|:---------:|-----|
 | via furio giunta          | 1             |           | ... |
 | via furio giunta          | 2             |           | ... |
 | via furio giunta          | 3             |           | ... |
