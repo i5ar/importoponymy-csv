@@ -81,3 +81,13 @@ Es.
 
 ### Sviluppo
 Questo applicativo è stato sviluppato per un caso molto specifico ma allo stesso tempo è stato pensato per potersi adattare a circostanze simili. Si invita a segnalare eventuali bugs.
+
+### License
+
+[MIT]
+
+___
+
+*Non men che saver, dubbiar m'aggrata.*
+
+[MIT]:https://opensource.org/licenses/MIT
