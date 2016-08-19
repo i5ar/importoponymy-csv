@@ -1,8 +1,10 @@
-Merge CSV
-=========
+Toponym CSV
+===========
 
-Questo programma è stato scritto per importare dei dati dal gestionale del territorio ad un comune software GIS senza rimuovere i dati già inseriti.
-Poiché l'inserimento dei dati non avviene in maniera sincronizzata nel software gestionale e nell'applicativo GIS, gli ID delle aree di circolazione inserite differiscono nei rispettivi databases.
+Fonde due files CSV (Comma Separated Values) in un unico file, contenente tutte le colonne dei files sorgente, filtrate per toponimo.
+
+Questo programma è stato scritto per importare dati territoriali da un software gestionale ad un comune applicativo GIS.
+Poiché i due applicativi utilizzano due differenti banche dati, le *primary keys* delle aree di circolazione inserite differiscono e questo ha reso indispensabile lo sviluppo di uno strumento atto ad operare un allineamento.
 
 ## Descrizione
 Considerato un CSV composto da **ID area di circolazione**, **DUG area di circolazione** e relativo **nome area di circolazione**
