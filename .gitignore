@@ -1,3 +1,6 @@
+build
+dist
+*.spec
 /data
 /dup.csv
 /out.csv

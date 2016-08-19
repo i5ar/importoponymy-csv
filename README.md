@@ -66,8 +66,8 @@ Es.
 
 | nome area di circolazione GIS | nome area di circolazione SIC |
 |:------------------------------|:------------------------------|
-| vico bobby baccalieri         | vico b.baccalieri            |
-| salita artie bucco            | salita a.bucco               |
+| vico bobby baccalieri         | vico b.baccalieri             |
+| salita artie bucco            | salita a.bucco                |
 
 ## Sviluppo
 Questo applicativo è stato sviluppato per un caso molto specifico ma allo stesso tempo è stato pensato per potersi adattare a circostanze simili. Si invita a contribuire allo sviluppo ed a segnalare eventuali bugs.
@@ -77,6 +77,9 @@ Questo applicativo è stato sviluppato per un caso molto specifico ma allo stess
 - Opzione colonna merge;
 - Opzione separatore (colonne e numeri decimali);
 - GUI.
+
+### Eseguibile
+Utilizzare le opzioni `--onefile` e `--icon=main.ico`.
 
 ## License
 
