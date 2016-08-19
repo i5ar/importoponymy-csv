@@ -1,7 +1,9 @@
-Toponym CSV
-===========
+Importoponymy CSV
+=================
 
-Fonde due files CSV (Comma Separated Values) in un unico file, contenente tutte le colonne dei files sorgente, filtrate per toponimo.
+:door: Fonde due files CSV (Comma Separated Values) in un unico file, contenente tutte le colonne dei files sorgente, filtrate per toponimo.
+
+> Line up big data with ease using CSV.
 
 Questo programma è stato scritto per importare dati territoriali da un software gestionale ad un comune applicativo GIS.
 Poiché i due applicativi utilizzano due differenti banche dati, le *primary keys* delle aree di circolazione inserite differiscono e questo ha reso indispensabile lo sviluppo di uno strumento atto ad operare un allineamento.
@@ -58,19 +60,25 @@ Es.
 
 ### Duplicati
 Per far fronte ad incoerenze nei toponimi è possibile creare un file CSV contenente i vari duplicati:
-Nella prima colonna si riporta il **nome area di circolazione** del CSV generato dal GIS, nella seconda colonna si riporta il **nome area di circolazione** del CSV generato dal SIC/SIT.
+Nella prima colonna si riporta il **nome area di circolazione** del CSV generato dal software GIS, nella seconda colonna si riporta il **nome area di circolazione** del CSV generato dal gestionale SIC/SIT.
 
 Es.
 
-| nome area di circolazione | nome area di circolazione |
-|:-------------------------:|:--------------------------|
-| vico bobby baccalieri     | vico b. baccalieri        |
-| salita artie bucco        | salita a. bucco           |
+| nome area di circolazione GIS | nome area di circolazione SIC |
+|:-----------------------------:|:------------------------------|
+| vico bobby baccalieri         | vico b. baccalieri            |
+| salita artie bucco            | salita a. bucco               |
 
-### Sviluppo
-Questo applicativo è stato sviluppato per un caso molto specifico ma allo stesso tempo è stato pensato per potersi adattare a circostanze simili. Si invita a segnalare eventuali bugs.
+## Sviluppo
+Questo applicativo è stato sviluppato per un caso molto specifico ma allo stesso tempo è stato pensato per potersi adattare a circostanze simili. Si invita a contribuire allo sviluppo ed a segnalare eventuali bugs.
 
-### License
+### TODO
+- Opzione colonne match;
+- Opzione colonna merge;
+- Opzione separatore (colonne e numeri decimali);
+- GUI.
+
+## License
 
 [MIT]
 
