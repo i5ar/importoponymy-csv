@@ -65,7 +65,7 @@ Nella prima colonna si riporta il **nome area di circolazione** del CSV generato
 Es.
 
 | nome area di circolazione GIS | nome area di circolazione SIC |
-|:-----------------------------:|:------------------------------|
+|:------------------------------|:------------------------------|
 | vico bobby baccalieri         | vico b. baccalieri            |
 | salita artie bucco            | salita a. bucco               |
 
