@@ -57,8 +57,8 @@ def add_extension(path):
     else:
         return path + '.csv'
 
-def list_address(sic_len, field, froad):
-    '''List address based on the columns number'''
+def list_address_sic(sic_len, froad, field):
+    '''List address based on the SIC columns number and the SIC area names'''
     address = []
     for i in range(sic_len):
         if i == 0:
@@ -70,12 +70,30 @@ def list_address(sic_len, field, froad):
             address.append(field[i])
     return address
 
+def list_address_gis(sic_len, froad, gname, rname, field):
+    '''List address based on the SIC columns number and the GIS area names'''
+    address = []
+    for i in range(sic_len):
+        if i == 0:
+            # Append "ID area"
+            address.append(froad)
+            # Append "DUG area"
+            address.append(gname)
+        elif i == 1:
+            # Append "name area"
+            address.append(rname)
+        else:
+            address.append(field[i])
+    return address
+
 with open(add_extension(path_gis), 'r') as file_gis:
     # https://docs.python.org/dev/library/csv.html
     has_header = Sniffer().has_header(file_gis.read(1024))
     file_gis.seek(0)
     spreadsheet = csv.reader(file_gis, delimiter=',')
-    gis = {}
+    dict_froad = {}
+    dict_gname = {}
+    dict_rname = {}
     for row in spreadsheet:
         if has_header:
             # Skip first line
@@ -83,8 +101,17 @@ with open(add_extension(path_gis), 'r') as file_gis:
             # print("GIS has header.", end="")
             continue
         else:
+            key_gis = row[1] +' '+ row[2] # 'salita artie bucco'
             # Append "key: value" to dictionary
-            gis[row[1] +' '+ row[2]] = row[0]
+            dict_froad[key_gis.lower()] = row[0]
+            dict_gname[key_gis.lower()] = row[1]
+            dict_rname[key_gis.lower()] = row[2]
+    # file_gis.seek(0)
+    # if has_header:
+    #     gis = tuple(spreadsheet)[1:]
+    # else:
+    #     gis = tuple(spreadsheet)
+    # print(gis, end="")
 file_gis.closed
 
 with open(add_extension(path_sic), 'r') as file_sic:
@@ -113,7 +140,6 @@ with open(add_extension(path_out), 'w') as o:
     writer = csv.writer(o, delimiter=',', lineterminator='\n')
     i = 0
     for field in sic:
-
         # Add header
         if i == 0:
             i += 1
@@ -128,17 +154,27 @@ with open(add_extension(path_out), 'w') as o:
                     address.append('')
             writer.writerow(address)
         else:
-
-            if field[0]+' '+field[1] in gis.keys():
+            if field[0]+' '+field[1] in dict_froad.keys():
                 # Get dictionary value from "area di circolazione" key
-                froad = gis[field[0]+' '+field[1]]
-                # Write "ID area", "DUG area" "nome area", "numero", "esponente"
-                writer.writerow(list_address(sic_len, field, froad))
+                key_sic = field[0]+' '+field[1]
+                froad = dict_froad[key_sic]
+                # NOTE: Use "DUG area", "nome area" from SIC
+                # writer.writerow(list_address_sic(sic_len, froad, field))
+                # NOTE: Use "DUG area", "nome area" from GIS
+                gname = dict_gname[key_sic]
+                rname = dict_rname[key_sic]
+                writer.writerow(list_address_gis(sic_len, froad, gname, rname, field))
             # Handle comparison with names dictionary
             else:
                 if path_dup:
                     for (key, value) in iteritems(dup):
                         if (field[0]+' '+field[1] == value): # 'salita a.bucco'
-                            froad = gis[key] # gis['salita artie bucco']
-                            writer.writerow(list_address(sic_len, field, froad))
+                            froad = dict_froad[key] # dict_froad['salita artie bucco']
+                            # NOTE: Use "DUG area", "nome area" from SIC
+                            # writer.writerow(list_address_sic(sic_len, froad, field))
+                            # NOTE: Use "DUG area", "nome area" from GIS
+                            gname = dict_gname[key]
+                            rname = dict_rname[key]
+                            writer.writerow(list_address_gis(sic_len, froad, gname, rname, field))
+
 o.closed
