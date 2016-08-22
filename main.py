@@ -57,14 +57,14 @@ def add_extension(path):
     else:
         return path + '.csv'
 
-print(type(os.path.basename(os.path.normpath(path_gis))), end="\n")
-
 def list_address(sic_len, field, froad):
     '''List address based on the columns number'''
     address = []
     for i in range(sic_len):
         if i == 0:
+            # Append "ID area"
             address.append(froad)
+            # Append "DUG area"
             address.append(field[i])
         else:
             address.append(field[i])
@@ -80,7 +80,7 @@ with open(add_extension(path_gis), 'r') as file_gis:
         if has_header:
             # Skip first line
             has_header = False
-            print("GIS has header.", end="")
+            # print("GIS has header.", end="")
             continue
         else:
             # Append "key: value" to dictionary
@@ -93,7 +93,7 @@ with open(add_extension(path_sic), 'r') as file_sic:
     spreadsheet = csv.reader(file_sic, delimiter=',')
     if has_header:
         sic = tuple(spreadsheet)[1:]
-        print("SIC has header.", end="")
+        # print("SIC has header.", end="")
     else:
         sic = tuple(spreadsheet)
     sic_len = len(sic[0])
@@ -111,17 +111,34 @@ if path_dup:
 
 with open(add_extension(path_out), 'w') as o:
     writer = csv.writer(o, delimiter=',', lineterminator='\n')
+    i = 0
     for field in sic:
-        if field[0]+' '+field[1] in gis.keys():
-            # Get dictionary value from "area di circolazione" key
-            froad = gis[field[0]+' '+field[1]]
-            # Write "ID area", "DUG area" "nome area", "numero", "esponente"
-            writer.writerow(list_address(sic_len, field, froad))
-        # Handle comparison with names dictionary
+
+        # Add header
+        if i == 0:
+            i += 1
+            address = []
+            for i in range(sic_len):
+                if i == 0:
+                    address.append('froad')
+                    address.append('gname')
+                elif i == 1:
+                    address.append('rname')
+                else:
+                    address.append('')
+            writer.writerow(address)
         else:
-            if path_dup:
-                for (key, value) in iteritems(dup):
-                    if (field[0]+' '+field[1] == value): # 'salita a.bucco'
-                        froad = gis[key] # gis['salita artie bucco']
-                        writer.writerow(list_address(sic_len, field, froad))
+
+            if field[0]+' '+field[1] in gis.keys():
+                # Get dictionary value from "area di circolazione" key
+                froad = gis[field[0]+' '+field[1]]
+                # Write "ID area", "DUG area" "nome area", "numero", "esponente"
+                writer.writerow(list_address(sic_len, field, froad))
+            # Handle comparison with names dictionary
+            else:
+                if path_dup:
+                    for (key, value) in iteritems(dup):
+                        if (field[0]+' '+field[1] == value): # 'salita a.bucco'
+                            froad = gis[key] # gis['salita artie bucco']
+                            writer.writerow(list_address(sic_len, field, froad))
 o.closed
