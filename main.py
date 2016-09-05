@@ -3,21 +3,21 @@
 
 from __future__ import print_function
 
-importoponymy_info = {
-    "name": "Importoponymy CSV",
-    "author": "iSar",
-    "year": "2016",
-    "version": (0, 0, 1),
-    "python": (2, 7, 10),
-    "wiki_url": "",
-    "tracker_url": "https://github.com/i5ar/importoponymy-csv/",
-    "description": "Line up big data with ease using CSV" }
-
 from builtins import input
 from six import iteritems
 import os
 import csv
 from csv import Sniffer
+
+importoponymy_info = {
+    "name": "itoponymy",
+    "author": "i5ar",
+    "year": "2016",
+    "version": (0, 0, 1),
+    "python": (2, 7, 10),
+    "wiki_url": "",
+    "tracker_url": "https://github.com/i5ar/itoponymy-csv/",
+}
 
 isar_ascii_logo = '''\
               ::::::::  ::::::::        :::::::::
@@ -35,8 +35,16 @@ isar_ascii_logo = '''\
      ##############        #####     ###
 '''
 
-print(importoponymy_info['name'], '.'.join(map(str, importoponymy_info['version'])), end="\n")
-print('Copyright (c)', importoponymy_info['year'], importoponymy_info['author'], end="\n\n")
+print(
+    importoponymy_info['name'],
+    '.'.join(map(str, importoponymy_info['version'])),
+    end="\n"
+)
+print(
+    'Copyright (c)', importoponymy_info['year'],
+    importoponymy_info['author'],
+    end="\n\n"
+)
 print(isar_ascii_logo, end="\n")
 
 # path_gis = 'gis.csv'
@@ -44,10 +52,19 @@ print(isar_ascii_logo, end="\n")
 # path_out = 'out.csv'
 # path_dup = 'dup.csv'
 
-path_gis = input("Inserisci il nome del file CSV esportato dal GIS [data/gis.csv]: ") or "data\\gis.csv"
-path_sic = input("Inserisci il nome del file CSV esportato dal SIC [data/sic.csv]: ") or "data\\sic.csv"
-path_out = input("Inserisci il nome del file CSV di output [out.csv]: ") or "out.csv"
-path_dup = input("Inserisci il nome del file CSV dei toponomi duplicati (facoltativo): ") or None
+path_gis = input(
+    "Inserisci il nome del file CSV esportato dal GIS [data/gis.csv]: "
+) or "data\\gis.csv"
+path_sic = input(
+    "Inserisci il nome del file CSV esportato dal SIC [data/sic.csv]: "
+) or "data\\sic.csv"
+path_out = input(
+    "Inserisci il nome del file CSV di output [out.csv]: "
+) or "out.csv"
+path_dup = input(
+    "Inserisci il nome del file CSV dei toponomi duplicati (facoltativo): "
+) or None
+
 
 def add_extension(path):
     '''Add extension if not provided'''
@@ -56,6 +73,7 @@ def add_extension(path):
         return path
     else:
         return path + '.csv'
+
 
 def list_address_sic(sic_len, froad, field):
     '''List address based on the SIC columns number and the SIC area names'''
@@ -69,6 +87,7 @@ def list_address_sic(sic_len, froad, field):
         else:
             address.append(field[i])
     return address
+
 
 def list_address_gis(sic_len, froad, gname, rname, field):
     '''List address based on the SIC columns number and the GIS area names'''
@@ -86,6 +105,7 @@ def list_address_gis(sic_len, froad, gname, rname, field):
             address.append(field[i])
     return address
 
+
 with open(add_extension(path_gis), 'r') as file_gis:
     # https://docs.python.org/dev/library/csv.html
     has_header = Sniffer().has_header(file_gis.read(1024))
@@ -101,7 +121,7 @@ with open(add_extension(path_gis), 'r') as file_gis:
             # print("GIS has header.", end="")
             continue
         else:
-            key_gis = row[1] +' '+ row[2] # 'salita artie bucco'
+            key_gis = row[1] + ' ' + row[2]  # 'salita artie bucco'
             # Append "key: value" to dictionary
             dict_froad[key_gis.lower()] = row[0]
             dict_gname[key_gis.lower()] = row[1]
@@ -146,10 +166,10 @@ with open(add_extension(path_out), 'w') as o:
             address = []
             for i in range(sic_len):
                 if i == 0:
-                    address.append('froad')
-                    address.append('gname')
+                    address.append('id area di circolazione')
+                    address.append('dug area di circolazione')
                 elif i == 1:
-                    address.append('rname')
+                    address.append('nome area di circolazione')
                 else:
                     address.append('')
             writer.writerow(address)
@@ -163,18 +183,18 @@ with open(add_extension(path_out), 'w') as o:
                 # NOTE: Use "DUG area", "nome area" from GIS
                 gname = dict_gname[key_sic]
                 rname = dict_rname[key_sic]
-                writer.writerow(list_address_gis(sic_len, froad, gname, rname, field))
+                writer.writerow(list_address_gis(
+                    sic_len, froad, gname, rname, field))
             # Handle comparison with names dictionary
             else:
                 if path_dup:
                     for (key, value) in iteritems(dup):
-                        if (field[0]+' '+field[1] == value): # 'salita a.bucco'
-                            froad = dict_froad[key] # dict_froad['salita artie bucco']
+                        if (field[0]+' '+field[1] == value):  # 'salita a.bucco'
+                            froad = dict_froad[key]  # dict_froad['salita artie bucco']
                             # NOTE: Use "DUG area", "nome area" from SIC
                             # writer.writerow(list_address_sic(sic_len, froad, field))
                             # NOTE: Use "DUG area", "nome area" from GIS
                             gname = dict_gname[key]
                             rname = dict_rname[key]
-                            writer.writerow(list_address_gis(sic_len, froad, gname, rname, field))
-
-o.closed
+                            writer.writerow(list_address_gis(
+                                sic_len, froad, gname, rname, field))
